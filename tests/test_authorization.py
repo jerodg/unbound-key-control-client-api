@@ -1,6 +1,5 @@
 #!/usr/bin/env python3.9
-"""Unbound KeyControl -> Init
-Copyright (C) 2021 Jerod Gawne <https://github.com/jerodg/>
+"""UKC->Tests->Authorization Copyright (C) 2021 Jerod Gawne <https://github.com/jerodg/>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the Server Side Public License (SSPL) as
@@ -17,10 +16,28 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
-from .ukc_client import UkcClient
-from loguru import logger
+import time
+from os import getenv
 
-BASE_LOGGER = 'unbound_keycontrol_client_api'
-logger.add(BASE_LOGGER)
-# Because this is a library; use logger.enable('unbound_keycontrol_client_api) in script to see log msgs.
-logger.disable(BASE_LOGGER)
+import pytest
+
+from base_client_api import bprint, Results, tprint
+from unbound_keycontrol_client_api import UkcClient
+
+
+@pytest.mark.asyncio
+async def test_login():
+    ts = time.perf_counter()
+
+    bprint('Test: Login')
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+        results = await ukc.authenticate()
+
+        # assert type(results) is Results
+        # assert len(results.success) == 1
+        # assert not results.failure
+        # assert results.success['UserId']
+
+        tprint(results)
+
+    bprint(f'-> Completed in {(time.perf_counter() - ts):f} seconds.')
