@@ -843,3 +843,4 @@ MigrationBackup/
 # Application Specific
 logs/
 base_client_api/
+tests/logs/
