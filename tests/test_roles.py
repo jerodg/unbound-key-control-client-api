@@ -19,16 +19,17 @@ You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
 import time
 from os import getenv
-from os.path import basename, realpath
 
 import pytest
+from loguru import logger
 
 from base_client_api import bprint, Results, tprint
 from unbound_keycontrol_client_api import UkcClient
 from unbound_keycontrol_client_api.models import ListAllRoles
-from loguru import logger
-logger.add(sink=realpath(f'../logs/{basename(__file__)[:-3]}.log'), rotation='1 day', retention='30 days', compression='zip',
-           enqueue=True, colorize=False, backtrace=True, diagnose=True, serialize=False)
+
+logger.disable('base_client_api')
+logger.disable('unbound_key_control_client_api.ukc_client')
+
 
 @pytest.mark.asyncio
 async def test_get_all_roles():
@@ -36,7 +37,7 @@ async def test_get_all_roles():
     bprint('Test: Get all Roles', 'top')
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
-        results = await ukc.make_request(models=ListAllRoles())
+        results = await ukc.make_request(models=ListAllRoles(), debug=True)
 
         assert type(results) is Results
         assert results.success is not None
