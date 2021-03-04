@@ -1,5 +1,5 @@
 #!/usr/bin/env python3.9
-"""UKC -> Models -> Partition
+"""Unbound KeyControl Client API -> Models -> Partition
 Copyright (C) 2021 Jerod Gawne <https://github.com/jerodg/>
 
 This program is free software: you can redistribute it and/or modify
@@ -17,11 +17,11 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
-from dataclasses import dataclass
-from typing import List, Optional, Union
+from dataclasses import dataclass, field
+from typing import List, Optional
 
-from base_client_api.models import Record
 from base_client_api import InvalidOptionError
+from base_client_api.models import Record
 
 TYPES = ['RSA', 'ECC', 'AES', 'TDES', 'DES', 'HMAC', 'SIV', 'XTS', 'PRF', 'PWD',
          'LIMA', 'EDDSA', 'TOTSSeed']
@@ -30,7 +30,7 @@ EXPORT_TYPES = ['IN_PLAIN', 'WRAPPED', 'WRAPPED_WITH_TRUSTED', 'NON_EXPORTABLE']
 
 @dataclass
 class PartitionPolicyRule(Record):
-    type: str
+    type: str = field
     minSize: Optional[int] = None
     curves: List[str] = None
     operations: List[str] = None

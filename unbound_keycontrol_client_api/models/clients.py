@@ -1,5 +1,5 @@
 #!/usr/bin/env python3.9
-"""Unbound KeyControl Client API -> Tests -> Init
+"""Unbound KeyControl Client API -> Models -> Clients
 Copyright (C) 2021 Jerod Gawne <https://github.com/jerodg/>
 
 This program is free software: you can redistribute it and/or modify
@@ -17,3 +17,4 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
+

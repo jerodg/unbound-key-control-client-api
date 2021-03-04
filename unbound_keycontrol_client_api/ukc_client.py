@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.9
-"""Copyright (C) 2021 Jerod Gawne <https://github.com/jerodg/>
+"""Unbound KeyControl Client API -> UKC Client
+Copyright (C) 2021 Jerod Gawne <https://github.com/jerodg/>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the Server Side Public License (SSPL) as
@@ -16,14 +17,13 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
-import asyncio
-from os.path import basename
 from sys import stdout
-from typing import Union
+from typing import NoReturn, Union
 
-from base_client_api import BaseClientApi, Results
+from base_client_api import BaseClientApi
+from loguru import logger
 
-from unbound_keycontrol_client_api import logger
+logger.add(__name__)
 
 
 class UkcClient(BaseClientApi):
@@ -36,18 +36,13 @@ class UkcClient(BaseClientApi):
             cfg (Union[str, dict]): As a str it should contain a full path
                 pointing to a configuration file (json/toml). See
                 config.* in the examples folder for reference."""
-        BaseClientApi.__init__(self, cfg=cfg)
-        self.cfg: Union[str, dict]
+        super().__init__(cfg=cfg)
 
     async def __aenter__(self):
         return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        await BaseClientApi.__aexit__(self, exc_type, exc_val, exc_tb)
-
-    @logger.catch
-    async def make_call(self):
-        pass
+    async def __aexit__(self, exc_type: None, exc_val: None, exc_tb: None) -> NoReturn:
+        await super().__aexit__(exc_type, exc_val, exc_tb)
 
 
 if __name__ == '__main__':

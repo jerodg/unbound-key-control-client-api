@@ -18,9 +18,3 @@ copies or substantial portions of the Software.
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
 from .ukc_client import UkcClient
-from loguru import logger
-
-BASE_LOGGER = 'unbound_keycontrol_client_api'
-logger.add(BASE_LOGGER)
-# Because this is a library; use logger.enable('unbound_keycontrol_client_api) in script to see log msgs.
-logger.disable(BASE_LOGGER)
