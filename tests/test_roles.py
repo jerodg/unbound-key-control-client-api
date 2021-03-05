@@ -37,7 +37,7 @@ async def test_get_all_roles():
     bprint('Test: Get all Roles', 'top')
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
-        results = await ukc.make_request(models=ListAllRoles(), debug=True)
+        results = await ukc.make_request(models=ListAllRoles())
 
         assert type(results) is Results
         assert results.success is not None

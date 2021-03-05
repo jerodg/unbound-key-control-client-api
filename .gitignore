@@ -841,6 +841,6 @@ MigrationBackup/
 # End of https://www.gitignore.io/api/vim,node,vuejs,linux,macos,emacs,python,windows,notepadpp,virtualenv,sublimetext,visualstudio,jetbrains+all
 
 # Application Specific
-logs/
-base_client_api/
-tests/logs/
+/logs/
+/base_client_api/
+/tests/logs/
