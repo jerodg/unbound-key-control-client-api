@@ -1,5 +1,5 @@
 #!/usr/bin/env python3.9
-"""Unbound KeyControl Client API -> Views -> Clients
+"""Unbound KeyControl Client API -> Models -> Init
 Copyright (C) 2021 Jerod Gawne <https://github.com/jerodg/>
 
 This program is free software: you can redistribute it and/or modify
@@ -17,25 +17,3 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
-
-from typing import List, Optional
-
-from base_client_api import MyConfig
-from pydantic.dataclasses import dataclass
-
-
-@dataclass(config=MyConfig)
-class Client:
-    """Client"""
-    name: Optional[str]
-    partition: Optional[str]
-    created_at: Optional[str]
-
-
-@dataclass(config=MyConfig)
-class ClientListResponse:
-    """Client List Response"""
-    total_items: Optional[int]
-    limit: Optional[int]
-    skip: Optional[int]
-    items: Optional[List[Client]]

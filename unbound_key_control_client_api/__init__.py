@@ -1,5 +1,5 @@
 #!/usr/bin/env python3.9
-"""Unbound KeyControl Client API -> UKC Client
+"""Unbound KeyControl -> Init
 Copyright (C) 2021 Jerod Gawne <https://github.com/jerodg/>
 
 This program is free software: you can redistribute it and/or modify
@@ -17,33 +17,12 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
-from typing import NoReturn, Union
+from sys import stdout
 
 from loguru import logger
 
-from base_client_api import BaseClientApi
+__version__ = '0.3.0'
 
-logger.add(__name__)
-
-
-class UkcClient(BaseClientApi):
-    """UKC Client"""
-
-    def __init__(self, cfg: Union[str, dict]):
-        """Initializes Class
-
-        Args:
-            cfg (Union[str, dict]): As a str it should contain a full path
-                pointing to a configuration file (json/toml). See
-                config.* in the examples folder for reference."""
-        super().__init__(cfg=cfg)
-
-    async def __aenter__(self):
-        return self
-
-    async def __aexit__(self, exc_type: None, exc_val: None, exc_tb: None) -> NoReturn:
-        await super().__aexit__(exc_type, exc_val, exc_tb)
-
-
-if __name__ == '__main__':
-    print(__doc__)
+# Because this is a library; use logger.enable('base_client_api) in script to see log msgs.
+logger.add(sink=stdout)
+logger.disable(__name__)

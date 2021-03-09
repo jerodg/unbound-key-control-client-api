@@ -17,32 +17,24 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
-import time
-from os import getenv
 
-import pytest
-from loguru import logger
-
-from base_client_api import bprint, Results, tprint
-from unbound_keycontrol_client_api import UkcClient
-from unbound_keycontrol_client_api.models import ListAllRoles
-
-logger.disable('base_client_api')
-logger.disable('unbound_key_control_client_api.ukc_client')
-
-
-@pytest.mark.asyncio
-async def test_get_all_roles():
-    ts = time.perf_counter()
-    bprint('Test: Get all Roles', 'top')
-
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
-        results = await ukc.make_request(models=ListAllRoles())
-
-        assert type(results) is Results
-        assert results.success is not None
-        assert not results.failure
-
-        tprint(results, top=5)
-
-    bprint(f'Completed in {(time.perf_counter() - ts):f} seconds.', 'bottom')
+# from base_client_api import bprint, Results, tprint
+# from unbound_key_control_client_api import UkcClient
+# from unbound_key_control_client_api.models import ListAllRoles
+#
+#
+# @pytest.mark.asyncio
+# async def test_get_all_roles():
+#     ts = time.perf_counter()
+#     bprint('Test: Get all Roles', 'top')
+#
+#     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+#         results = await ukc.make_request(models=ListAllRoles())
+#
+#         assert type(results) is Results
+#         assert results.success is not None
+#         assert not results.failure
+#
+#         tprint(results, top=5)
+#
+#     bprint(f'Completed in {(time.perf_counter() - ts):f} seconds.', 'bottom')

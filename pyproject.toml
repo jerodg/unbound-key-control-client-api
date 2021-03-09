@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "unbound-keycontrol-client-api"
-version = "0.2.0"
-description = ""
+name = "unbound-key-control-client-api"
+version = "0.3.0"
+description = "Client API for Unbound Key Control"
 authors = ["Jerod Gawne <jerodgawne@gmail.com>"]
 
 [[tool.poetry.source]]
@@ -10,10 +10,10 @@ url = 'http://slflokydcaims01.info53.com:3141/root/pypi/+simple/'
 default = true
 
 [tool.poetry.dependencies]
-python = "^3.9"
+#base-client-api = "^2.0"
 loguru = "^0.5"
-#base-client-api = "^1.0"
 pydantic = "^1.8"
+python = "^3.9"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
@@ -27,6 +27,7 @@ aiofiles = "^0.6"
 aiohttp = "^3.7"
 cchardet = "^2.1"
 python-rapidjson = "^1.0"
+rich = "^9.13.0"
 tenacity = "^7.0"
 toml = "^0.10"
 brotlipy = "^0.7"
