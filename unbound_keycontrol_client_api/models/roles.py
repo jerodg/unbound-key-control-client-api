@@ -17,56 +17,24 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
-from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from dataclasses import field
+from typing import Optional, Union
 
+from base_client_api import MyConfig
 from base_client_api.models import Record
+from pydantic.dataclasses import dataclass
 
 
-@dataclass
-class RolePermission(Record):
-    objectGroup: Optional[str] = None
-    operations: Optional[List[str]] = None
+@dataclass(config=MyConfig)
+class RolesListAll(Record):
+    """ Roles -> List All
 
-
-@dataclass
-class Role(Record):
-    name: Optional[str] = None
-    partition: Optional[str] = None
-    createdAt: Optional[str] = None
-    updatedAt: Optional[str] = None
-    managedObjectPermissions: Optional[List[RolePermission]] = None
-
-
-@dataclass
-class RoleListResponse(Record):
-    totalItems: Optional[int] = None  # Only returned when ListAllRoles.limit is used
-    limit: Optional[int] = None  # Only returned when ListAllRoles.limit is used
-    skip: Optional[int] = None  # Only returned when ListAllRoles.skip is used
-    items: Optional[List[Role]] = None  # Only returned when any above are used
-
-    @property
-    def data_key(self) -> Union[str, None]:
-        """Data Key
-
-        This is the key used in the return dict that holds the primary data
-
-        Returns:
-            (Union[str, None])"""
-        if self.limit or self.skip:
-            return 'items'
-        else:
-            return None
-
-
-@dataclass
-class ListAllRoles(Record):
-    """GET /api/v1/roles
-       - Return a list of all roles in a partition."""
-    partitionId: str = None
-    limit: int = None
-    skip: int = None
-    detailed: bool = None
+    GET /api/v1/roles
+    Return a list of all roles in a partition."""
+    partitionId: Optional[str]
+    limit: Optional[int]
+    skip: Optional[int]
+    detailed: Optional[bool] = True
 
     @property
     def endpoint(self) -> str:
@@ -109,7 +77,7 @@ class ListAllRoles(Record):
 
         Returns:
             (Union[dict, None])"""
-        return self.dict(cleanup=...)
+        return self.dict()
 
     @property
     def headers(self) -> Union[dict, None]:
@@ -122,26 +90,16 @@ class ListAllRoles(Record):
         return {'Accept': 'application/json'}
 
 
-@dataclass
-class ListOneRole(ListAllRoles):
+@dataclass(config=MyConfig)
+class RolesGetOne(Record):
+    """Roles -> Get One
 
-    def dict(self, cleanup: Optional[bool] = True, dct: Optional[dict] = None, sort_order: Optional[str] = 'asc') -> dict:
-        """
-        Args:
-            cleanup (Optional[bool]):
-            dct (Optional[dict]):
-            sort_order (Optional[str]): ASC | DESC
-
-        Returns:
-            dict (dict):"""
-        dct = super().dict()
-        del dct['limit']
-        del dct['skip']
-
-        return dct
+    GET /api/v1/roles/{roleId}
+    Get details of an existing role."""
+    roleId: str
 
 
-@dataclass
+@dataclass(config=MyConfig)
 class NewRole(Role):
     role: Role = field(default_factory=Role)
     partitionId: str = None
@@ -183,7 +141,7 @@ class NewRole(Role):
         return 'POST'
 
 
-@dataclass
+@dataclass(config=MyConfig)
 class UpdatedRole(NewRole):
     """Update a role."""
 

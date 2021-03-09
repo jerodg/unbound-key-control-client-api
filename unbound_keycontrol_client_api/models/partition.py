@@ -17,11 +17,12 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
-from dataclasses import dataclass, field
+from dataclasses import field
 from typing import List, Optional
 
 from base_client_api import InvalidOptionError
 from base_client_api.models import Record
+from pydantic.dataclasses import dataclass
 
 TYPES = ['RSA', 'ECC', 'AES', 'TDES', 'DES', 'HMAC', 'SIV', 'XTS', 'PRF', 'PWD',
          'LIMA', 'EDDSA', 'TOTSSeed']
