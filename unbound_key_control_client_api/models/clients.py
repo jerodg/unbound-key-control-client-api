@@ -17,8 +17,9 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
-from typing import Optional, Union
+from typing import Optional
 
+from base_client_api.models.pydantic_cfg import pascal_case
 from base_client_api.models.record import Record
 from pydantic import validator
 
@@ -36,6 +37,9 @@ class ClientCreateOne(Record):
     activation_code_length: Optional[int]  # digits
     ip_range: Optional[str]  # CIDR 0.0.0.0/0
     certificate_expiration: Optional[int]  # minutes
+
+    class Config:
+        alias_generator = pascal_case
 
     @validator('expiration', 'activation_code_validity', 'activation_code_length', 'certificate_expiration')
     def check_int_length(cls, value) -> int:
@@ -160,7 +164,7 @@ class RefreshedCertificateClient(Record):
     certificate_expiration: Optional[int]
     activation_code_validity: Optional[int]
     activation_code_length: Optional[int]
-    ip_range: Optional[str]
+    ip_range: Optional[str]  # cidr
 
 
 class ClientRefreshActivationCode(Record):
@@ -168,7 +172,7 @@ class ClientRefreshActivationCode(Record):
        - Refresh the client's activation code."""
     client_id: str
     partition_id: Optional[str]
-    data: Optional[RefreshedCertificateClient]
+    payload: Optional[RefreshedCertificateClient]
 
     @property
     def endpoint(self) -> str:
@@ -181,14 +185,14 @@ class ClientRefreshActivationCode(Record):
         return f'/clients/{self.client_id}/activation-code'
 
     @property
-    def data_key(self) -> str:
+    def data_key(self) -> Optional[str]:
         """Data Key
 
         This is the key used in the return dict that holds the primary responses
 
         Returns:
             (str)"""
-        return ''
+        return None
 
     @property
     def method(self) -> str:
@@ -201,7 +205,7 @@ class ClientRefreshActivationCode(Record):
         return 'PUT'
 
     @property
-    def params(self) -> Union[dict, None]:
+    def params(self) -> Optional[dict]:
         """URL Parameters
 
         If you need to pass parameters in the URL
@@ -209,17 +213,20 @@ class ClientRefreshActivationCode(Record):
         Returns:
             (Union[dict, None])"""
         if self.partitionId:
-            return {'partitionId': self.partitionId}
+            return {'partitionId': self.partition_id}
 
-        return {}
+        return None
 
     @property
-    def body(self) -> str:
+    def body(self) -> Optional[dict]:
         """Request Body"""
-        return self.data.json(by_alias=True, exclude_none=True)
+        if self.payload:
+            return self.payload.dict()
+
+        return None
 
     @property
-    def headers(self) -> Union[dict, None]:
+    def headers(self) -> Optional[dict]:
         """Headers
 
         If you need to pass non-default headers

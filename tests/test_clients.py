@@ -24,8 +24,10 @@ import pytest
 from base_client_api.models.results import Results
 from base_client_api.utils import bprint, tprint
 from pydantic import ValidationError
+from rich import print
 
-from unbound_key_control_client_api.models.clients import ClientCreateOne, ClientsListAll
+from unbound_key_control_client_api.models.clients import (ClientCreateOne, ClientRefreshActivationCode, ClientsListAll,
+                                                           RefreshedCertificateClient)
 from unbound_key_control_client_api.ukc_client import UkcClient
 
 
@@ -47,32 +49,44 @@ async def test_clients_list_all():
 
 
 @pytest.mark.asyncio
-async def test_clients_create_one():
+async def test_client_create_one():
     ts = time.perf_counter()
     bprint('Test: Clients Create One', 'top')
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
-        results = await ukc.make_request(models=ClientCreateOne(name=f'test_client_api',
-                                                                check_ip=False,
-                                                                allow_nat=False,
-                                                                expiration=333333,
-                                                                activation_code_validity=333333,
-                                                                is_template=False,
-                                                                activation_code_length=33,
-                                                                ip_range='0.0.0.0/0',
-                                                                certificate_expiration=333333))
+        # results = await ukc.make_request(models=ClientCreateOne(name=f'test_client_api',
+        #                                                         check_ip=False,
+        #                                                         allow_nat=False,
+        #                                                         expiration=333333,
+        #                                                         activation_code_validity=333333,
+        #                                                         is_template=False,
+        #                                                         activation_code_length=33,
+        #                                                         ip_range='0.0.0.0/0',
+        #                                                         certificate_expiration=333333))
 
-        assert type(results) is Results
-        assert results.success is not None
-        assert not results.failure
+        m = ClientCreateOne(name=f'test_client_api',
+                            check_ip=False,
+                            allow_nat=False,
+                            expiration=333333,
+                            activation_code_validity=333333,
+                            is_template=False,
+                            activation_code_length=33,
+                            ip_range='0.0.0.0/0',
+                            certificate_expiration=333333)
+        print(m)
+        print(m.body)
 
-        tprint(results)
+        # assert type(results) is Results
+        # assert results.success is not None
+        # assert not results.failure
+        #
+        # tprint(results)
 
     bprint(f'Completed in {(time.perf_counter() - ts):f} seconds.', 'bottom')
 
 
 @pytest.mark.asyncio
-async def test_clients_create_one_check_validation():
+async def test_client_create_one_check_validation():
     ts = time.perf_counter()
     bprint('Test: Clients Create One (Check Field Validation)', 'top')
 
@@ -95,17 +109,34 @@ async def test_clients_create_one_check_validation():
 
 
 @pytest.mark.asyncio
-async def test_clients_():
+async def test_client_refresh_activation_code():
     ts = time.perf_counter()
-    bprint('Test: Clients List All', 'top')
+    bprint('Test: Client Refresh Activation Code', 'top')
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
-        results = await ukc.make_request(models=ClientsListAll())
+        p = RefreshedCertificateClient(certificateExpiration=3333,
+                                       activationCodeValidity=3333,
+                                       activationCodeLength=15,
+                                       ipRange='0.0.0.0/8')
+        # print(p)
+        # print('p:', p.json(by_alias=True))
+        # print('p2:', p.dict(by_alias=True))
 
-        assert type(results) is Results
-        assert results.success is not None
-        assert not results.failure
+        m = ClientRefreshActivationCode(clientId='test_client_api',
+                                        payload=p)
+        # # m = ClientRefreshActivationCode(client_id='test_client_api')
+        # m = ClientRefreshActivationCode(clientId='test_client_api')
+        print(m.body)
+        print(m.endpoint)
+        print(m.dict())
+        # print(m.payload)
 
-        tprint(results, top=5)
+        # results = await ukc.make_request(models=m)
+        #
+        # assert type(results) is Results
+        # assert results.success is not None
+        # assert not results.failure
+        #
+        # tprint(results)
 
     bprint(f'Completed in {(time.perf_counter() - ts):f} seconds.', 'bottom')
