@@ -19,14 +19,16 @@ You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
 from typing import Optional
 
-from base_client_api.models.pydantic_cfg import pascal_case
 from base_client_api.models.record import Record
 from pydantic import validator
 
 
 class ClientCreateOne(Record):
-    """POST /api/v1/clients
-       - Creates a new client and returns the activation code."""
+    """Client -> Create One
+
+    POST /api/v1/clients
+
+    Creates a new client and returns the activation code."""
     name: str
     partition_id: Optional[str]
     check_ip: Optional[bool]
@@ -37,9 +39,6 @@ class ClientCreateOne(Record):
     activation_code_length: Optional[int]  # digits
     ip_range: Optional[str]  # CIDR 0.0.0.0/0
     certificate_expiration: Optional[int]  # minutes
-
-    class Config:
-        alias_generator = pascal_case
 
     @validator('expiration', 'activation_code_validity', 'activation_code_length', 'certificate_expiration')
     def check_int_length(cls, value) -> int:
@@ -78,7 +77,7 @@ class ClientCreateOne(Record):
         return 'POST'
 
     @property
-    def params(self) -> Optional[str]:
+    def parameters(self) -> Optional[str]:
         """URL Parameters
 
         If you need to pass parameters in the URL
@@ -98,19 +97,22 @@ class ClientCreateOne(Record):
         return {'Accept': 'application/json', 'Content-Type': 'application/json'}
 
     @property
-    def body(self) -> Optional[dict]:
+    def json_body(self) -> Optional[dict]:
         """Request Body"""
         return self.dict(exclude={'partition_id'})
 
 
 class ClientsListAll(Record):
-    """GET /api/v1/clients
-       - Return a list of all clients."""
+    """Clients -> List All
+
+    GET /api/v1/clients
+
+    Return a list of all clients."""
 
     partition_id: Optional[str]
     limit: Optional[int]
     skip: Optional[int]
-    detailed: Optional[bool]
+    detailed: Optional[bool] = True
     template: Optional[str]
 
     @property
@@ -124,18 +126,14 @@ class ClientsListAll(Record):
         return '/clients'
 
     @property
-    def data_key(self) -> str:
+    def response_key(self) -> str:
         """Data Key
 
         This is the key used in the return dict that holds the primary responses
 
         Returns:
             (str)"""
-
-        if self.limit or self.skip:
-            return 'items'
-
-        return ''
+        return 'items' if self.limit or self.skip else None
 
     @property
     def method(self) -> str:
@@ -168,11 +166,14 @@ class RefreshedCertificateClient(Record):
 
 
 class ClientRefreshActivationCode(Record):
-    """PUT /api/v1/clients/{clientId}/activation-code
-       - Refresh the client's activation code."""
+    """Client -> Refresh Activation Code
+
+    PUT /api/v1/clients/{clientId}/activation-code
+
+    Refresh the client's activation code."""
     client_id: str
     partition_id: Optional[str]
-    payload: Optional[RefreshedCertificateClient]
+    body: Optional[RefreshedCertificateClient]
 
     @property
     def endpoint(self) -> str:
@@ -185,16 +186,6 @@ class ClientRefreshActivationCode(Record):
         return f'/clients/{self.client_id}/activation-code'
 
     @property
-    def data_key(self) -> Optional[str]:
-        """Data Key
-
-        This is the key used in the return dict that holds the primary responses
-
-        Returns:
-            (str)"""
-        return None
-
-    @property
     def method(self) -> str:
         """Method
 
@@ -205,25 +196,14 @@ class ClientRefreshActivationCode(Record):
         return 'PUT'
 
     @property
-    def params(self) -> Optional[dict]:
+    def parameters(self) -> Optional[str]:
         """URL Parameters
 
         If you need to pass parameters in the URL
 
         Returns:
             (Union[dict, None])"""
-        if self.partitionId:
-            return {'partitionId': self.partition_id}
-
-        return None
-
-    @property
-    def body(self) -> Optional[dict]:
-        """Request Body"""
-        if self.payload:
-            return self.payload.dict()
-
-        return None
+        return self.json(include={'partition_id'})
 
     @property
     def headers(self) -> Optional[dict]:
