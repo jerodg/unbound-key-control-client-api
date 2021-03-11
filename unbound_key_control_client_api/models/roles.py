@@ -218,16 +218,6 @@ class RoleCreateOne(Record):
         return 'POST'
 
     @property
-    def parameters(self) -> Optional[str]:
-        """URL Parameters
-
-        If you need to pass parameters in the URL
-
-        Returns:
-            (dict)"""
-        return self.json(include={'partition_id'})
-
-    @property
     def headers(self) -> Optional[dict]:
         """Headers
 
@@ -236,11 +226,6 @@ class RoleCreateOne(Record):
         Returns:
             (dict)"""
         return {'Accept': 'application/json', 'Content-Type': 'application/json'}
-
-    @property
-    def json_body(self) -> Optional[dict]:
-        """Request Body"""
-        return self.body.dict()
 
 
 class UpdatedRole(Record):
@@ -278,16 +263,6 @@ class RoleUpdateOne(Record):
         Returns:
             (str)"""
         return 'PUT'
-
-    @property
-    def parameters(self) -> Optional[str]:
-        """URL Parameters
-
-        If you need to pass parameters in the URL
-
-        Returns:
-            (dict)"""
-        return self.json(exclude={'body'})
 
     @property
     def headers(self) -> Optional[dict]:

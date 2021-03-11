@@ -88,7 +88,7 @@ async def test_role_create_one():
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
         m = RoleCreateOne(partitionId='sandbox',
-                          body=NewRole(name='test-client-api',
+                          body=NewRole(name='test-client-api-role',
                                        managedObjectsPermissions=[RolePermission(objectGroup='test-client-api',
                                                                                  operations=['ACTIVATE'])]))
         # todo: change this to a template
