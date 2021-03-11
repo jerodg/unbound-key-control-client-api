@@ -17,160 +17,284 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
+from typing import List, Optional
 
-#
-# class RolesListAll(Record):
-#     """ Roles -> List All
-#
-#     GET /api/v1/roles
-#     Return a list of all roles in a partition."""
-#     partitionId: Optional[str]
-#     limit: Optional[int]
-#     skip: Optional[int]
-#     detailed: Optional[bool] = True
-#
-#     @property
-#     def endpoint(self) -> str:
-#         """Endpoint
-#
-#         The suffix end of the URI
-#
-#         Returns:
-#             (str)"""
-#         return '/roles'
-#
-#     @property
-#     def data_key(self) -> Union[str, None]:
-#         """Data Key
-#
-#         This is the key used in the return dict that holds the primary data
-#
-#         Returns:
-#             (Union[str, None])"""
-#         if self.limit or self.skip:
-#             return 'items'
-#         else:
-#             return None
-#
-#     @property
-#     def method(self) -> str:
-#         """Method
-#
-#         The HTTP verb to be used
-#
-#         Returns:
-#             (str)"""
-#         return 'GET'
-#
-#     @property
-#     def params(self) -> Union[dict, None]:
-#         """URL Parameters
-#
-#         If you need to pass parameters in the URL
-#
-#         Returns:
-#             (Union[dict, None])"""
-#         return self.dict()
-#
-#     @property
-#     def headers(self) -> Union[dict, None]:
-#         """URL Parameters
-#
-#         If you need to pass parameters in the URL
-#
-#         Returns:
-#             (Union[dict, None])"""
-#         return {'Accept': 'application/json'}
-#
-#
-# class RolesGetOne(Record):
-#     """Roles -> Get One
-#
-#     GET /api/v1/roles/{roleId}
-#     Get details of an existing role."""
-#     roleId: str
-#
-#
-# class NewRole(Role):
-#     role: Role = field(default_factory=Role)
-#     partitionId: str = None
-#
-#     def dict(self, cleanup: Optional[bool] = True, dct: Optional[dict] = None, sort_order: Optional[str] = 'asc') -> dict:
-#         """
-#         Args:
-#             cleanup (Optional[bool]):
-#             dct (Optional[dict]):
-#             sort_order (Optional[str]): ASC | DESC
-#
-#         Returns:
-#             dict (dict):"""
-#         dct = super().dict()
-#         if dct['partition']:
-#             dct['partitionId'] = dct['partition']
-#             del dct['partition']
-#
-#         return dct
-#
-#     @property
-#     def endpoint(self) -> str:
-#         """Endpoint
-#
-#         The suffix end of the URI
-#
-#         Returns:
-#             (str)"""
-#         return '/roles/'
-#
-#     @property
-#     def method(self) -> str:
-#         """Method
-#
-#         The HTTP verb to be used
-#
-#         Returns:
-#             (str)"""
-#         return 'POST'
-#
-#
-# class UpdatedRole(NewRole):
-#     """Update a role."""
-#
-#     def dict(self, cleanup: Optional[bool] = True, dct: Optional[dict] = None, sort_order: Optional[str] = 'asc') -> dict:
-#         """
-#         Args:
-#             cleanup (Optional[bool]):
-#             dct (Optional[dict]):
-#             sort_order (Optional[str]): ASC | DESC
-#
-#         Returns:
-#             dict (dict):"""
-#         dct = super().dict()
-#         if dct['partition']:
-#             dct['partitionId'] = dct['partition']
-#             del dct['partition']
-#
-#         del dct['name']
-#         del dct['createdAt']
-#         del dct['updateAt']
-#
-#         return dct
-#
-#     @property
-#     def endpoint(self) -> str:
-#         """Endpoint
-#
-#         The suffix end of the URI
-#
-#         Returns:
-#             (str)"""
-#         return f'/roles/{self.role.name}'
-#
-#     @property
-#     def method(self) -> str:
-#         """Method
-#
-#         The HTTP verb to be used
-#
-#         Returns:
-#             (str)"""
-#         return 'PUT'
+from base_client_api.models.record import Record
+from pydantic import validator
+
+ROLE_PERMISSION_OPERATIONS = {'ACTIVATE',
+                              'ENABLE/DISABLE',
+                              'REVOKE',
+                              'ATTR-ADD',
+                              'ATTR-CHANGE',
+                              'ATTR-DELETE',
+                              'LINK',
+                              'RELINK',
+                              'UNLINK',
+                              'TOKENIZE',
+                              'CHANGE-SECRET',
+                              'DELETE',
+                              'DESTROY',
+                              'DERIVE-EXT',
+                              'DERIVE',
+                              'RE-KEYPAIR',
+                              'RE-KEY',
+                              'GENERATE-KEYPAIR',
+                              'GENERATE-KEY',
+                              'IMPORT',
+                              'EXPORT-SECRET',
+                              'EXPORT-KEY',
+                              'MAC-VERIFY',
+                              'MAC-CREATE',
+                              'VERIFY',
+                              'SIGN',
+                              'DECRYPT',
+                              'ENCRYPT'}
+
+
+class RolesListAll(Record):
+    """ Roles -> List All
+
+    GET /api/v1/roles
+
+    Return a list of all roles in a partition."""
+    partition_id: Optional[str]
+    limit: Optional[int]
+    skip: Optional[int]
+    detailed: Optional[bool] = True
+
+    @property
+    def endpoint(self) -> str:
+        """Endpoint
+
+        The suffix end of the URI
+
+        Returns:
+            (str)"""
+        return '/roles'
+
+    @property
+    def response_key(self) -> Optional[str]:
+        """Data Key
+
+        This is the key used in the return dict that holds the primary responses
+
+        Returns:
+            (str)"""
+        return 'items' if self.limit or self.skip else None
+
+    @property
+    def method(self) -> Optional[str]:
+        """Method
+
+        The HTTP verb to be used
+         - Must be a valid HTTP verb as listed above in METHODS
+
+        Returns:
+            (str)"""
+        return 'GET'
+
+    @property
+    def headers(self) -> Optional[dict]:
+        """Headers
+
+        If you need to pass non-default headers
+
+        Returns:
+            (dict)"""
+        return {'Accept': 'application/json'}
+
+
+class RoleGetOne(Record):
+    """Roles -> Get One
+
+    GET /api/v1/roles/{roleId}
+
+    Get details of an existing role."""
+    role_id: str
+    partition_id: Optional[str]
+    detailed: Optional[bool] = True
+
+    @property
+    def endpoint(self) -> str:
+        """Endpoint
+
+        The suffix end of the URI
+
+        Returns:
+            (str)"""
+        return f'/roles/{self.role_id}'
+
+    @property
+    def method(self) -> Optional[str]:
+        """Method
+
+        The HTTP verb to be used
+         - Must be a valid HTTP verb as listed above in METHODS
+
+        Returns:
+            (str)"""
+        return 'GET'
+
+    @property
+    def headers(self) -> Optional[dict]:
+        """Headers
+
+        If you need to pass non-default headers
+
+        Returns:
+            (dict)"""
+        return {'Accept': 'application/json'}
+
+    @property
+    def parameters(self) -> Optional[str]:
+        """URL Parameters
+
+        If you need to pass parameters in the URL
+
+        Returns:
+            (dict)"""
+        return self.json(exclude={'role_id'})
+
+
+class RolePermission(Record):
+    """Role -> Permission"""
+    object_group: Optional[str]
+    operations: Optional[List[str]]
+
+    @validator('operations')
+    def verify_operations(cls, value) -> list:
+        """Verify Operations
+
+        Checks if the operations specified are valid for the API
+
+        Args:
+            value (list):
+
+        Returns:
+            value (list):"""
+        contains = list(map(lambda x: x in ROLE_PERMISSION_OPERATIONS, value))
+
+        if False in contains:
+            raise ValueError(f'Operations must be one of: {", ".join(ROLE_PERMISSION_OPERATIONS)}')
+
+        return value
+
+
+class NewRole(Record):
+    """Role -> New"""
+    name: str
+    managed_objects_permissions: List[RolePermission]
+
+
+class RoleCreateOne(Record):
+    """Role -> Create One
+
+    POST /api/v1/roles
+
+    Create a new role in a given partition."""
+    partition_id: Optional[str]
+    body: NewRole
+
+    @property
+    def endpoint(self) -> str:
+        """Endpoint
+
+        The suffix end of the URI
+
+        Returns:
+            (str)"""
+        return '/roles'
+
+    @property
+    def method(self) -> Optional[str]:
+        """Method
+
+        The HTTP verb to be used
+         - Must be a valid HTTP verb as listed above in METHODS
+
+        Returns:
+            (str)"""
+        return 'POST'
+
+    @property
+    def parameters(self) -> Optional[str]:
+        """URL Parameters
+
+        If you need to pass parameters in the URL
+
+        Returns:
+            (dict)"""
+        return self.json(include={'partition_id'})
+
+    @property
+    def headers(self) -> Optional[dict]:
+        """Headers
+
+        If you need to pass non-default headers
+
+        Returns:
+            (dict)"""
+        return {'Accept': 'application/json', 'Content-Type': 'application/json'}
+
+    @property
+    def json_body(self) -> Optional[dict]:
+        """Request Body"""
+        return self.body.dict()
+
+
+class UpdatedRole(Record):
+    """Role -> Update"""
+    managed_objects_permissions: List[RolePermission]
+
+
+class RoleUpdateOne(Record):
+    """Role -> Update One
+
+    PUT /api/v1/roles/{roleId}
+
+    Update a role."""
+    role_id: str
+    partition_id: Optional[str]
+    body: UpdatedRole
+
+    @property
+    def endpoint(self) -> str:
+        """Endpoint
+
+        The suffix end of the URI
+
+        Returns:
+            (str)"""
+        return f'/roles/{self.role_id}'
+
+    @property
+    def method(self) -> Optional[str]:
+        """Method
+
+        The HTTP verb to be used
+         - Must be a valid HTTP verb as listed above in METHODS
+
+        Returns:
+            (str)"""
+        return 'PUT'
+
+    @property
+    def parameters(self) -> Optional[str]:
+        """URL Parameters
+
+        If you need to pass parameters in the URL
+
+        Returns:
+            (dict)"""
+        return self.json(exclude={'body'})
+
+    @property
+    def headers(self) -> Optional[dict]:
+        """Headers
+
+        If you need to pass non-default headers
+
+        Returns:
+            (dict)"""
+        return {'Accept': 'application/json', 'Content-Type': 'application/json'}

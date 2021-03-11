@@ -17,3 +17,12 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
+from sys import stdout
+
+from loguru import logger
+
+__version__ = '0.2.0'
+
+# Because this is a library; use logger.enable('base_client_api) in script to see log msgs.
+logger.add(sink=stdout, colorize=True, enqueue=True)
+logger.disable(__name__)

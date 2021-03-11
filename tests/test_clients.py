@@ -56,7 +56,7 @@ async def test_clients_list_all():
 @pytest.mark.asyncio
 async def test_client_create_one():
     ts = time.perf_counter()
-    bprint('Test: Clients Create One', 'top')
+    bprint('Test: Client Create One', 'top')
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
         results = await ukc.make_request(models=ClientCreateOne(name=f'test_client_api',
@@ -79,10 +79,11 @@ async def test_client_create_one():
 
 
 @pytest.mark.asyncio
-async def test_client_create_one_check_validation():
+async def test_client_create_one_verify_validation():
     ts = time.perf_counter()
-    bprint('Test: Clients Create One (Check Field Validation)', 'top')
+    bprint('Test: Client Create One -> Verify Validation', 'top')
 
+    # todo: add positive test before negative
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
         try:
             await ukc.make_request(models=ClientCreateOne(name=f'test_client_api',
