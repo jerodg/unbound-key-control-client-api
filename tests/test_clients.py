@@ -31,7 +31,7 @@ from unbound_key_control_client_api.models.clients import (ClientCreateOne, Clie
                                                            RefreshedCertificateClient)
 from unbound_key_control_client_api.ukc_client import UkcClient
 
-logger.enable('base_client_api')
+# logger.enable('base_client_api')  # debug
 
 
 @pytest.mark.asyncio
@@ -41,7 +41,7 @@ async def test_clients_list_all():
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
         m = ClientsListAll(limit=25, skip=3, partitionId='sandbox')
-        print(m.parameters)
+        # print(m.parameters)  # debug
         results = await ukc.make_request(models=m)
 
         assert type(results) is Results
@@ -116,9 +116,10 @@ async def test_client_refresh_activation_code():
                         activationCodeLength=15,
                         ipRange='0.0.0.0/8'))
 
-        print(m)
-        print(m.parameters)
-        print(m.json_body)
+        # debug
+        # print(m)
+        # print(m.parameters)
+        # print(m.json_body)
 
         results = await ukc.make_request(models=m)
 

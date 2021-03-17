@@ -844,3 +844,4 @@ MigrationBackup/
 /logs/
 /base_client_api/
 /tests/logs/
+poetry.lock

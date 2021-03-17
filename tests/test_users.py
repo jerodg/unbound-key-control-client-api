@@ -42,8 +42,11 @@ async def test_users_list_all():
         m = UsersListAll(partitionId='sandbox',
                          limit=25,
                          skip=3)
-        print(m)
-        print(m.parameters)
+
+        # debug
+        # print(m)
+        # print(m.parameters)
+
         results = await ukc.make_request(models=m)
 
         assert type(results) is Results
@@ -67,9 +70,13 @@ async def test_user_create_one():
                                        role='test-client-api-role',
                                        # aliases=UserAliases(),  # API isn't accepting this currently
                                        authType='STANDARD'))
-        print(m)
-        print(m.parameters)
-        print(m.json_body)
+
+        # debug
+        # print(m)
+        # print(m.parameters)
+        # print(m.json_body)
+        # m.json(exclude={'some_field'})
+
         results = await ukc.make_request(models=m)
 
         assert type(results) is Results

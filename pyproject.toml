@@ -10,27 +10,28 @@ url = 'http://slflokydcaims01.info53.com:3141/root/pypi/+simple/'
 default = true
 
 [tool.poetry.dependencies]
-#base-client-api = "^2.0"
-loguru = "^0.5"
-pydantic = "^1.8"
-python = "^3.9"
+#base-client-api = "^2.0.0"
+loguru = "^0.5.3"
+pydantic = "^1.8.1"
+python = "^3.9.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2"
-pytest-asyncio = "^0.14"
-pytest-cov = "^2.11"
-pytest-runner = "^5.3"
-twine = "^3.3"
+pytest = "^6.2.2"
+pytest-asyncio = "^0.14.0"
+pytest-cov = "^2.11.1"
+pytest-runner = "^5.3.0"
+twine = "^3.3.0"
 # until base is published
-aiodns = "^2.0"
-aiofiles = "^0.6"
-aiohttp = "^3.7"
-brotlipy = "^0.7"
-cchardet = "^2.1"
+aiodns = "^2.0.0"
+aiofiles = "^0.6.0"
+aiohttp = "^3.7.4"
+brotlipy = "^0.7.0"
+cchardet = "^2.1.7"
 python-rapidjson = "^1.0"
 rich = "^9.13.0"
-tenacity = "^7.0"
-toml = "^0.10"
+tenacity = "^7.0.0"
+toml = "^0.10.2"
+asgiref = "^3.3.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

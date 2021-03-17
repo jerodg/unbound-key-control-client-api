@@ -50,7 +50,8 @@ async def test_keys_list_all():
                         is_enabled=True,
                         showDestroyed=False)
 
-        print(m.parameters)
+        # print(m.parameters)  # debug
+
         results = await ukc.make_request(models=m)
 
         assert type(results) is Results
@@ -94,8 +95,10 @@ async def test_key_generate_one():
                                                            #                                   paillier_keys=None)
                                                            )))
 
-        print(m.parameters)
-        print(m.json_body)
+        # debug
+        # print(m.parameters)
+        # print(m.json_body)
+
         results = await ukc.make_request(models=m)
 
         assert type(results) is Results
@@ -117,8 +120,10 @@ async def test_key_delete_one():
                          keyId='test_client_key',
                          fullDelete=True)
 
-        print(m.parameters)
-        print(m.endpoint)
+        # debug
+        # print(m.parameters)
+        # print(m.endpoint)
+
         results = await ukc.make_request(models=m)
 
         assert type(results) is Results

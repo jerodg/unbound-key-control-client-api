@@ -48,8 +48,11 @@ async def test_roles_list_all():
         m = RolesListAll(partitionId='sandbox',
                          limit=25,
                          skip=3)
-        print(m)
-        print(m.parameters)
+
+        # debug
+        # print(m)
+        # print(m.parameters)
+
         results = await ukc.make_request(models=m)
 
         assert type(results) is Results
@@ -92,9 +95,11 @@ async def test_role_create_one():
                                        managedObjectsPermissions=[RolePermission(objectGroup='test-client-api',
                                                                                  operations=['ACTIVATE'])]))
         # todo: change this to a template
-        print(m)
-        print(m.parameters)
-        print(m.json_body)
+        # debug
+        # print(m)
+        # print(m.parameters)
+        # print(m.json_body)
+
         results = await ukc.make_request(models=m)
 
         assert type(results) is Results
@@ -141,9 +146,11 @@ async def test_role_update_one():
                           body=UpdatedRole(managedObjectsPermissions=[RolePermission(objectGroup='test-client-api',
                                                                                      operations=['ACTIVATE', 'SIGN', 'DELETE'])]))
         # todo: change this to a template
-        print(m)
-        print(m.parameters)
-        print(m.json_body)
+        # debug
+        # print(m)
+        # print(m.parameters)
+        # print(m.json_body)
+
         results = await ukc.make_request(models=m)
 
         assert type(results) is Results
