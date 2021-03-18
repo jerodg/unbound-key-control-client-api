@@ -24,7 +24,6 @@ import pytest
 from base_client_api.models.results import Results
 from base_client_api.utils import bprint, tprint
 from loguru import logger
-from rich import print
 
 from unbound_key_control_client_api.models.keys import KeyDeleteOne, KeyFormat, KeyGenerateOne, KeyProperties, KeysListAll, NewKey
 from unbound_key_control_client_api.ukc_client import UkcClient
@@ -38,17 +37,17 @@ async def test_keys_list_all():
     bprint('Test: Keys List All', 'top')
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
-        m = KeysListAll(partitionId='sandbox',
+        m = KeysListAll(partition_id='sandbox',
                         limit=25,
                         skip=3,
                         id=None,
                         type=None,
-                        export_Type=None,
+                        export_type=None,
                         trusted=None,
                         groups=None,
                         state=None,
                         is_enabled=True,
-                        showDestroyed=False)
+                        show_destroyed=False)
 
         # print(m.parameters)  # debug
 
@@ -69,31 +68,31 @@ async def test_key_generate_one():
     bprint('Test: Key Generate One', 'top')
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
-        m = KeyGenerateOne(userId='',
-                           partitionId='sandbox',
-                           body=NewKey(keyId='test_client_key',
-                                       keyIdEncoding=None,
-                                       keyProperties=KeyProperties(description='test_client_key',
-                                                                   supportedOperations=['SIGN', 'DERIVE', 'ENCRYPT', 'DECRYPT'],
-                                                                   trusted=True,
-                                                                   keyRotationInterval=333,
-                                                                   exportType='WRAPPED_WITH_TRUSTED',
-                                                                   groups=['default', 'g.general.read']),
-                                       keyStoreProperties=None,
+        m = KeyGenerateOne(user_id='',
+                           partition_id='sandbox',
+                           body=NewKey(key_id='test_client_key',
+                                       key_id_encoding=None,
+                                       key_properties=KeyProperties(description='test_client_key',
+                                                                    supported_operations=['SIGN', 'DERIVE', 'ENCRYPT', 'DECRYPT'],
+                                                                    trusted=True,
+                                                                    key_rotation_interval=333,
+                                                                    export_type='WRAPPED_WITH_TRUSTED',
+                                                                    groups=['default', 'g.general.read']),
+                                       key_store_properties=None,
                                        # KeyStoreProperties(keyStoreName=None,
                                        #                                       keyStoreObjectId=None,
                                        #                                       byok=None)
                                        activate=True,
-                                       activationDate=None,
-                                       deactivationDate=None,
-                                       keyFormat=KeyFormat(type='ECC',
-                                                           size='521',
-                                                           curve='P521',
-                                                           offlineKeyParams=None
-                                                           # OfflineKeyParams(backup=None,
-                                                           #                                   paillierKey=None,
-                                                           #                                   paillier_keys=None)
-                                                           )))
+                                       activation_date=None,
+                                       deactivation_date=None,
+                                       key_format=KeyFormat(type='ECC',
+                                                            size='521',
+                                                            curve='P521',
+                                                            offline_key_params=None
+                                                            # OfflineKeyParams(backup=None,
+                                                            #                                   paillier_key=None,
+                                                            #                                   paillier_keys=None)
+                                                            )))
 
         # debug
         # print(m.parameters)
@@ -116,9 +115,9 @@ async def test_key_delete_one():
     bprint('Test: Key Delete One', 'top')
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
-        m = KeyDeleteOne(partitionId='sandbox',
-                         keyId='test_client_key',
-                         fullDelete=True)
+        m = KeyDeleteOne(partition_id='sandbox',
+                         key_id='test_client_key',
+                         full_delete=True)
 
         # debug
         # print(m.parameters)

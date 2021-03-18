@@ -25,7 +25,6 @@ import pytest
 from base_client_api.models.results import Results
 from base_client_api.utils import bprint, tprint
 from loguru import logger
-from rich import print
 
 from unbound_key_control_client_api.models.users import NewUser, UserCreateOne, UsersListAll
 from unbound_key_control_client_api.ukc_client import UkcClient
@@ -39,7 +38,7 @@ async def test_users_list_all():
     bprint('Test: Users List All', 'top')
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
-        m = UsersListAll(partitionId='sandbox',
+        m = UsersListAll(partition_id='sandbox',
                          limit=25,
                          skip=3)
 
@@ -64,12 +63,12 @@ async def test_user_create_one():
     bprint('Test: User Create One', 'top')
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
-        m = UserCreateOne(partitionId='sandbox',
+        m = UserCreateOne(partition_id='sandbox',
                           body=NewUser(password='MySuperAwesomeP@ssw0rd',
                                        name='test-client-api-user',
                                        role='test-client-api-role',
                                        # aliases=UserAliases(),  # API isn't accepting this currently
-                                       authType='STANDARD'))
+                                       auth_type='STANDARD'))
 
         # debug
         # print(m)

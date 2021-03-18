@@ -29,8 +29,8 @@ class UsersListAll(Record):
 
     Return a list of all users in a partition."""
     partition_id: Optional[str]
-    limit: Optional[str]
-    skip: Optional[str]
+    limit: Optional[int]
+    skip: Optional[int]
 
     @property
     def endpoint(self) -> str:

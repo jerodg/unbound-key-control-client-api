@@ -45,7 +45,7 @@ async def test_roles_list_all():
     bprint('Test: Roles List All', 'top')
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
-        m = RolesListAll(partitionId='sandbox',
+        m = RolesListAll(partition_id='sandbox',
                          limit=25,
                          skip=3)
 
@@ -70,7 +70,7 @@ async def test_role_get_one():
     bprint('Test: Role Get One', 'top')
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
-        m = RoleGetOne(roleId='client-tests', partitionId='sandbox')
+        m = RoleGetOne(role_id='client-tests', partition_id='sandbox')
         print(m)
         print(m.parameters)
         results = await ukc.make_request(models=m)
@@ -90,10 +90,10 @@ async def test_role_create_one():
     bprint('Test: Role Create One', 'top')
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
-        m = RoleCreateOne(partitionId='sandbox',
+        m = RoleCreateOne(partition_id='sandbox',
                           body=NewRole(name='test-client-api-role',
-                                       managedObjectsPermissions=[RolePermission(objectGroup='test-client-api',
-                                                                                 operations=['ACTIVATE'])]))
+                                       managed_objects_permissions=[RolePermission(object_group='test-client-api',
+                                                                                   operations=['ACTIVATE'])]))
         # todo: change this to a template
         # debug
         # print(m)
@@ -118,16 +118,16 @@ async def test_role_create_one_verify_validation():
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
         try:
-            m = RoleCreateOne(partitionId='sandbox',
+            m = RoleCreateOne(partition_id='sandbox',
                               body=NewRole(name='test-client-api',
-                                           managedObjectsPermissions=[RolePermission(objectGroup='test-client-api',
-                                                                                     operations=['ACTIVATE'])]))
+                                           managed_objects_permissions=[RolePermission(object_group='test-client-api',
+                                                                                       operations=['ACTIVATE'])]))
             print('Success:\n', m)
 
-            m = RoleCreateOne(partitionId='sandbox',
+            m = RoleCreateOne(partition_id='sandbox',
                               body=NewRole(name='test-client-api',
-                                           managedObjectsPermissions=[RolePermission(objectGroup='test-client-api',
-                                                                                     operations=['MC-TEST'])]))
+                                           managed_objects_permissions=[RolePermission(object_group='test-client-api',
+                                                                                       operations=['MC-TEST'])]))
         except ValidationError as ve:
             bprint(str(ve))
             # The expected success criteria for this test is for this error to be raised.
@@ -141,10 +141,10 @@ async def test_role_update_one():
     bprint('Test: Role Update One', 'top')
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
-        m = RoleUpdateOne(roleId='test-client-api',
-                          partitionId='sandbox',
-                          body=UpdatedRole(managedObjectsPermissions=[RolePermission(objectGroup='test-client-api',
-                                                                                     operations=['ACTIVATE', 'SIGN', 'DELETE'])]))
+        m = RoleUpdateOne(role_id='test-client-api',
+                          partition_id='sandbox',
+                          body=UpdatedRole(managed_objects_permissions=[RolePermission(object_group='test-client-api',
+                                                                                       operations=['ACTIVATE', 'SIGN', 'DELETE'])]))
         # todo: change this to a template
         # debug
         # print(m)
