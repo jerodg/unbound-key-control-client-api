@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.9
+#!/usr/bin/env python3.8
 """Unbound KeyControl Client API -> Views -> Clients
 Copyright (C) 2021 Jerod Gawne <https://github.com/jerodg/>
 
@@ -18,9 +18,8 @@ copies or substantial portions of the Software.
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
 
-from typing import List, Optional
-
 from base_client_api.models.record import Record
+from typing import List, Optional
 
 
 class Client(Record):

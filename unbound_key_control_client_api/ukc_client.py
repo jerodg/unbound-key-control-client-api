@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.9
+#!/usr/bin/env python3.8
 """Unbound KeyControl Client API -> UKC Client
 Copyright (C) 2021 Jerod Gawne <https://github.com/jerodg/>
 
@@ -17,9 +17,8 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
-from typing import NoReturn, Union
-
 from base_client_api.base_client import BaseClientApi
+from typing import NoReturn, Union
 
 
 class UkcClient(BaseClientApi):
