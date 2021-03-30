@@ -17,9 +17,10 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
+from typing import Optional
+
 from base_client_api.models.record import Record
 from pydantic import validator
-from typing import Optional
 
 
 class ClientCreateOne(Record):
@@ -213,3 +214,45 @@ class ClientRefreshActivationCode(Record):
         Returns:
             (Union[dict, None])"""
         return {'Accept': 'application/json', 'Content-Type': 'application/json'}
+
+
+class ClientGetDetails(Record):
+    """Client -> Get Details
+
+    GET /api/v1/clients/{clientId}
+
+    Return a list of all clients."""
+    client_id: str
+    partition_id: Optional[str]
+    detailed: Optional[bool] = True
+
+    @property
+    def endpoint(self) -> str:
+        """Endpoint
+
+        The suffix end of the URI
+
+        Returns:
+            (str)"""
+        return f'/clients/{self.client_id}'
+
+    @property
+    def method(self) -> str:
+        """Method
+
+        The HTTP verb to be used
+         - Must be a valid HTTP verb as listed above in METHODS
+
+        Returns:
+            (str)"""
+        return 'GET'
+
+    @property
+    def headers(self) -> dict:
+        """Headers
+
+        If you need to pass non-default headers
+
+        Returns:
+            (dict)"""
+        return {'Accept': 'application/json'}
