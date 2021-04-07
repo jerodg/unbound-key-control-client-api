@@ -192,7 +192,6 @@ class KeyGenerateOne(Record):
     PUT /api/v1/keys/generate
 
     Generate a new key."""
-    user_id: str
     partition_id: Optional[str]
     body: NewKey
 
