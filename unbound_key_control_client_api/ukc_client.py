@@ -17,14 +17,15 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
+from typing import List, NoReturn, Optional, Union
+
 from base_client_api.base_client import BaseClientApi
-from typing import NoReturn, Union
 
 
 class UkcClient(BaseClientApi):
     """UKC Client"""
 
-    def __init__(self, cfg: Union[str, dict]):
+    def __init__(self, cfg: Optional[Union[str, dict, List[Union[str, dict]]]] = None):
         """Initializes Class
 
         Args:

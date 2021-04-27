@@ -18,8 +18,9 @@ copies or substantial portions of the Software.
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
 
-from base_client_api.models.record import Record
 from typing import List, Optional
+
+from base_client_api.models.record import Record
 
 
 class Client(Record):

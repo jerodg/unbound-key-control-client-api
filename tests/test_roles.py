@@ -18,14 +18,15 @@ copies or substantial portions of the Software.
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
 
+from os import getenv
+from time import perf_counter
+
 import pytest
 from base_client_api.models.results import Results
 from base_client_api.utils import bprint, tprint
 from loguru import logger
-from os import getenv
 from pydantic import ValidationError
 from rich import print
-from time import perf_counter
 
 from unbound_key_control_client_api.models.roles import (NewRole, RoleCreateOne, RoleGetOne, RolePermission, RolesListAll,
                                                          RoleUpdateOne, UpdatedRole)
