@@ -17,6 +17,7 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
+from os import getenv
 from typing import List, NoReturn, Optional, Union
 
 from base_client_api.base_client import BaseClientApi
@@ -33,12 +34,26 @@ class UkcClient(BaseClientApi):
                 pointing to a configuration file (json/toml). See
                 config.* in the examples folder for reference."""
         super().__init__(cfg=cfg)
+        self.load_custom_config_data()
 
     async def __aenter__(self):
         return self
 
     async def __aexit__(self, exc_type: None, exc_val: None, exc_tb: None) -> NoReturn:
         await super().__aexit__(exc_type, exc_val, exc_tb)
+
+    def load_custom_config_data(self) -> NoReturn:
+        """Load Custom Configuration Data
+
+        Returns:
+            (NoReturn)"""
+        self.cfg['Auth']['Username'] = getenv('UKC_USER')
+        self.cfg['Auth']['Password'] = getenv('UKC_PASS')
+
+        if e := getenv('UKC_BASE'):
+            self.cfg['URI']['Base'] = e
+
+        return
 
 
 if __name__ == '__main__':

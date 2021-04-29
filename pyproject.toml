@@ -5,7 +5,7 @@ description = "Client API for Unbound Key Control"
 authors = ["Jerod Gawne <jerodgawne@gmail.com>"]
 
 [tool.poetry.dependencies]
-base-client-api = "^2.2.0"
+base-client-api = "^2.2.2"
 python = "^3.8.0"  # Recommended 3.9.0+
 
 [tool.poetry.dev-dependencies]
