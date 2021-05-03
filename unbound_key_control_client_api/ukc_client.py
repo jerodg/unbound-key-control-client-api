@@ -26,15 +26,15 @@ from base_client_api.base_client import BaseClientApi
 class UkcClient(BaseClientApi):
     """UKC Client"""
 
-    def __init__(self, cfg: Optional[Union[str, dict, List[Union[str, dict]]]] = None):
+    def __init__(self, cfg: Optional[Union[str, dict, List[Union[str, dict]]]] = None, env_prefix: Optional[str] = 'UKC_'):
         """Initializes Class
 
         Args:
             cfg (Union[str, dict]): As a str it should contain a full path
                 pointing to a configuration file (json/toml). See
                 config.* in the examples folder for reference."""
-        super().__init__(cfg=cfg)
-        self.load_custom_config_data()
+        super().__init__(cfg=cfg, env_prefix=env_prefix)
+        self.load_custom_config()
 
     async def __aenter__(self):
         return self
@@ -42,15 +42,15 @@ class UkcClient(BaseClientApi):
     async def __aexit__(self, exc_type: None, exc_val: None, exc_tb: None) -> NoReturn:
         await super().__aexit__(exc_type, exc_val, exc_tb)
 
-    def load_custom_config_data(self) -> NoReturn:
+    def load_custom_config(self) -> NoReturn:
         """Load Custom Configuration Data
 
         Returns:
             (NoReturn)"""
-        self.cfg['Auth']['Username'] = getenv('UKC_USER')
-        self.cfg['Auth']['Password'] = getenv('UKC_PASS')
+        self.cfg['Auth']['Username'] = getenv(f'{self.env_prefix}Auth_Username')
+        self.cfg['Auth']['Password'] = getenv(f'{self.env_prefix}Auth_Password')
 
-        if e := getenv('UKC_BASE'):
+        if e := getenv('UKC_URI_BASE'):
             self.cfg['URI']['Base'] = e
 
         return
