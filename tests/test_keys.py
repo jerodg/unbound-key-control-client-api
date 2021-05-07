@@ -36,7 +36,7 @@ async def test_keys_list_all():
     ts = time.perf_counter()
     bprint('Test: Keys List All', 'top')
 
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
         m = KeysListAll(partition_id='sandbox',
                         limit=25,
                         skip=3,
@@ -67,7 +67,7 @@ async def test_key_generate_one():
     ts = time.perf_counter()
     bprint('Test: Key Generate One', 'top')
 
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
         m = KeyGenerateOne(user_id='',
                            partition_id='sandbox',
                            body=NewKey(key_id='test_client_key',
@@ -114,7 +114,7 @@ async def test_key_delete_one():
     ts = time.perf_counter()
     bprint('Test: Key Delete One', 'top')
 
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
         m = KeyDeleteOne(partition_id='sandbox',
                          key_id='test_client_key',
                          full_delete=True)

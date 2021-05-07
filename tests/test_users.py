@@ -37,7 +37,7 @@ async def test_users_list_all():
     ts = perf_counter()
     bprint('Test: Users List All', 'top')
 
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
         m = UsersListAll(partition_id='sandbox',
                          limit=25,
                          skip=3)
@@ -62,7 +62,7 @@ async def test_user_create_one():
     ts = perf_counter()
     bprint('Test: User Create One', 'top')
 
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
         m = UserCreateOne(partition_id='sandbox',
                           body=NewUser(password='MySuperAwesomeP@ssw0rd',
                                        name='test-client-api-user',

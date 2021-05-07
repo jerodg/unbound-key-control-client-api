@@ -44,7 +44,7 @@ async def test_roles_list_all():
     ts = perf_counter()
     bprint('Test: Roles List All', 'top')
 
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
         m = RolesListAll(partition_id='sandbox',
                          limit=25,
                          skip=3)
@@ -69,7 +69,7 @@ async def test_role_get_one():
     ts = perf_counter()
     bprint('Test: Role Get One', 'top')
 
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
         m = RoleGetOne(role_id='client-tests', partition_id='sandbox')
         print(m)
         print(m.parameters)
@@ -89,7 +89,7 @@ async def test_role_create_one():
     ts = perf_counter()
     bprint('Test: Role Create One', 'top')
 
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
         m = RoleCreateOne(partition_id='sandbox',
                           body=NewRole(name='test-client-api-role',
                                        managed_objects_permissions=[RolePermission(object_group='test-client-api',
@@ -116,7 +116,7 @@ async def test_role_create_one_verify_validation():
     ts = perf_counter()
     bprint('Test: Role Create One -> Verify Validation', 'top')
 
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
         try:
             m = RoleCreateOne(partition_id='sandbox',
                               body=NewRole(name='test-client-api',
@@ -140,7 +140,7 @@ async def test_role_update_one():
     ts = perf_counter()
     bprint('Test: Role Update One', 'top')
 
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
         m = RoleUpdateOne(role_id='test-client-api',
                           partition_id='sandbox',
                           body=UpdatedRole(managed_objects_permissions=[RolePermission(object_group='test-client-api',
