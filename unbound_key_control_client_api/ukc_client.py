@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.8
+#!/usr/bin/env python3.9
 """Unbound KeyControl Client API -> UKC Client
 Copyright (C) 2021 Jerod Gawne <https://github.com/jerodg/>
 
@@ -17,8 +17,7 @@ copies or substantial portions of the Software.
 
 You should have received a copy of the SSPL along with this program.
 If not, see <https://www.mongodb.com/licensing/server-side-public-license>."""
-from os import getenv
-from typing import List, NoReturn, Optional, Union
+from typing import NoReturn, Optional, Union
 
 from base_client_api.base_client import BaseClientApi
 
@@ -26,15 +25,17 @@ from base_client_api.base_client import BaseClientApi
 class UkcClient(BaseClientApi):
     """UKC Client"""
 
-    def __init__(self, cfg: Optional[Union[str, dict, List[Union[str, dict]]]] = None, env_prefix: Optional[str] = 'UKC_'):
+    def __init__(self, cfg: Optional[Union[str, dict]] = None, env_prefix: Optional[str] = 'UKC_'):
         """Initializes Class
 
         Args:
             cfg (Union[str, dict]): As a str it should contain a full path
                 pointing to a configuration file (json/toml). See
                 config.* in the examples folder for reference."""
+        print('env_prefix_ukc', env_prefix)
         super().__init__(cfg=cfg, env_prefix=env_prefix)
-        self.load_custom_config()
+        # self.HDR =
+        # self.load_custom_config()
 
     async def __aenter__(self):
         return self
@@ -42,18 +43,21 @@ class UkcClient(BaseClientApi):
     async def __aexit__(self, exc_type: None, exc_val: None, exc_tb: None) -> NoReturn:
         await super().__aexit__(exc_type, exc_val, exc_tb)
 
-    def load_custom_config(self) -> NoReturn:
-        """Load Custom Configuration Data
-
-        Returns:
-            (NoReturn)"""
-        self.cfg['Auth']['Username'] = getenv(f'{self.env_prefix}Auth_Username')
-        self.cfg['Auth']['Password'] = getenv(f'{self.env_prefix}Auth_Password')
-
-        if e := getenv('UKC_URI_BASE'):
-            self.cfg['URI']['Base'] = e
-
-        return
+    # def load_custom_config(self) -> NoReturn:
+    #     """Load Custom Configuration Data
+    #
+    #     Returns:
+    #         (NoReturn)"""
+    #     if usr := getenv(f'{self.env_prefix}Auth_Username'):
+    #         self.cfg['Auth']['Username'] = usr
+    #
+    #     if pswd := getenv(f'{self.env_prefix}Auth_Password'):
+    #         self.cfg['Auth']['Password'] = pswd
+    #
+    #     if uri := getenv('UKC_URI_BASE'):
+    #         self.cfg['URI']['Base'] = uri
+    #
+    #     return
 
 
 if __name__ == '__main__':

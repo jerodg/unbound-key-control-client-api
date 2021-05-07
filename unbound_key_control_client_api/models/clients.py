@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.8
+#!/usr/bin/env python3.9
 """Unbound KeyControl Client API -> Models -> Clients
 Copyright (C) 2021 Jerod Gawne <https://github.com/jerodg/>
 
@@ -77,14 +77,14 @@ class ClientCreateOne(Record):
         return 'POST'
 
     @property
-    def parameters(self) -> Optional[str]:
+    def parameters(self) -> Optional[dict]:
         """URL Parameters
 
         If you need to pass parameters in the URL
 
         Returns:
             (dict)"""
-        return self.json(include={'partition_id'})
+        return self.dict(include={'partition_id'})
 
     @property
     def headers(self) -> Optional[dict]:
@@ -196,14 +196,14 @@ class ClientRefreshActivationCode(Record):
         return 'PUT'
 
     @property
-    def parameters(self) -> Optional[str]:
+    def parameters(self) -> Optional[dict]:
         """URL Parameters
 
         If you need to pass parameters in the URL
 
         Returns:
             (Union[dict, None])"""
-        return self.json(include={'partition_id'})
+        return self.dict(include={'partition_id'})
 
     @property
     def headers(self) -> Optional[dict]:
@@ -215,6 +215,14 @@ class ClientRefreshActivationCode(Record):
             (Union[dict, None])"""
         return {'Accept': 'application/json', 'Content-Type': 'application/json'}
 
+    @property
+    def json_body(self) -> Optional[dict]:
+        """Request Body"""
+        if self.body:
+            return self.body.dict()
+
+        return self.dict(exclude={'client_id'})
+
 
 class ClientGetDetails(Record):
     """Client -> Get Details
@@ -224,7 +232,7 @@ class ClientGetDetails(Record):
     Return a list of all clients."""
     client_id: str
     partition_id: Optional[str]
-    detailed: Optional[bool] = True
+    detailed: Optional[str] = 'true'
 
     @property
     def endpoint(self) -> str:
@@ -256,3 +264,14 @@ class ClientGetDetails(Record):
         Returns:
             (dict)"""
         return {'Accept': 'application/json'}
+
+    @property
+    def parameters(self) -> Optional[dict]:
+        """URL Parameters
+
+        If you need to pass parameters in the URL
+
+        Returns:
+            (dict)"""
+        # return None
+        return self.dict(exclude={'client_id'})

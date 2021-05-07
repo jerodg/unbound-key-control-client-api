@@ -39,7 +39,7 @@ async def test_clients_list_all():
     ts = time.perf_counter()
     bprint('Test: Clients List All', 'top')
 
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
         model = ClientsListAll(limit=25, skip=3, partition_id='sandbox')
 
         debug(model)
@@ -63,7 +63,7 @@ async def test_client_create_one():
     ts = time.perf_counter()
     bprint('Test: Client Create One', 'top')
 
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
         model = ClientCreateOne(name=f'test_client_api',
                                 check_ip=False,
                                 allow_nat=False,
@@ -95,7 +95,7 @@ async def test_client_create_one_verify_validation():
     bprint('Test: Client Create One -> Verify Validation', 'top')
 
     # todo: add positive test before negative
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
         try:
             model = ClientCreateOne(name=f'test_client_api',
                                     check_ip=False,
@@ -118,14 +118,16 @@ async def test_client_refresh_activation_code():
     ts = time.perf_counter()
     bprint('Test: Client Refresh Activation Code', 'top')
 
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
         model = ClientRefreshActivationCode(
-                client_id='test_client_api',
+                client_id='je1234-eclient',
+                partition_id='sandbox',
                 body=RefreshedCertificateClient(
                         certificate_expiration=3333,
                         activation_code_validity=3333,
                         activation_code_length=15,
-                        ip_range='0.0.0.0/8'))
+                        ip_range='0.0.0.0/24'
+                        ))
 
         debug(model)
         debug(model.endpoint)
@@ -137,7 +139,7 @@ async def test_client_refresh_activation_code():
 
         assert type(results) is Results
         assert results.success is not None
-        assert not results.failure
+        # assert not results.failure
 
         tprint(results)
 
@@ -149,8 +151,10 @@ async def test_client_get_details():
     ts = time.perf_counter()
     bprint('Test: Client Get Details', 'top')
 
-    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_snd.toml') as ukc:
-        model = ClientGetDetails(client_id='je1234-eclient')
+    async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
+        ukc.debug = True
+        # print(ukc.cfg)
+        model = ClientGetDetails(client_id='je1234-eclient', partition_id='sandbox')
 
         debug(model)
         debug(model.parameters)
@@ -161,7 +165,7 @@ async def test_client_get_details():
 
         assert type(results) is Results
         assert results.success is not None
-        assert not results.failure
+        # assert not results.failure
 
         tprint(results)
 
