@@ -32,7 +32,7 @@ class UkcClient(BaseClientApi):
             cfg (Union[str, dict]): As a str it should contain a full path
                 pointing to a configuration file (json/toml). See
                 config.* in the examples folder for reference."""
-        print('env_prefix_ukc', env_prefix)
+        # print('env_prefix_ukc', env_prefix)
         super().__init__(cfg=cfg, env_prefix=env_prefix)
         # self.HDR =
         # self.load_custom_config()

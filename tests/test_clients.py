@@ -40,7 +40,7 @@ async def test_clients_list_all():
     bprint('Test: Clients List All', 'top')
 
     async with UkcClient(cfg=f'{getenv("CFG_HOME")}/unbound_test.toml') as ukc:
-        model = ClientsListAll(limit=25, skip=3, partition_id='sandbox')
+        model = ClientsListAll(partition_id='sandbox')
 
         debug(model)
         debug(model.parameters)

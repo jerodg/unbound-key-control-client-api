@@ -112,7 +112,7 @@ class ClientsListAll(Record):
     partition_id: Optional[str]
     limit: Optional[int]
     skip: Optional[int]
-    detailed: Optional[bool] = True
+    detailed: Optional[str] = 'True'
     template: Optional[str]
 
     @property
@@ -155,6 +155,16 @@ class ClientsListAll(Record):
         Returns:
             (dict)"""
         return {'Accept': 'application/json'}
+
+    @property
+    def parameters(self) -> Optional[dict]:
+        """URL Parameters
+
+        If you need to pass parameters in the URL
+
+        Returns:
+            (dict)"""
+        return self.dict()
 
 
 class RefreshedCertificateClient(Record):

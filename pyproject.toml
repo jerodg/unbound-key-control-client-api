@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "unbound-key-control-client-api"
-version = "0.14.4"
+version = "0.15.0"
 description = "Client API for Unbound Key Control"
 authors = ["Jerod Gawne <jerodgawne@gmail.com>"]
 
