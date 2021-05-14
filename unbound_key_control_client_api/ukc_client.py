@@ -25,39 +25,21 @@ from base_client_api.base_client import BaseClientApi
 class UkcClient(BaseClientApi):
     """UKC Client"""
 
-    def __init__(self, cfg: Optional[Union[str, dict]] = None, env_prefix: Optional[str] = 'UKC_'):
+    def __init__(self, cfg: Optional[Union[str, dict]] = None, platform_prefix: Optional[str] = 'UKC_',
+                 instance_prefix: Optional[str] = None):
         """Initializes Class
 
         Args:
             cfg (Union[str, dict]): As a str it should contain a full path
                 pointing to a configuration file (json/toml). See
                 config.* in the examples folder for reference."""
-        # print('env_prefix_ukc', env_prefix)
-        super().__init__(cfg=cfg, env_prefix=env_prefix)
-        # self.HDR =
-        # self.load_custom_config()
+        super().__init__(cfg=cfg, platform_prefix=platform_prefix, instance_prefix=instance_prefix)
 
     async def __aenter__(self):
         return self
 
     async def __aexit__(self, exc_type: None, exc_val: None, exc_tb: None) -> NoReturn:
         await super().__aexit__(exc_type, exc_val, exc_tb)
-
-    # def load_custom_config(self) -> NoReturn:
-    #     """Load Custom Configuration Data
-    #
-    #     Returns:
-    #         (NoReturn)"""
-    #     if usr := getenv(f'{self.env_prefix}Auth_Username'):
-    #         self.cfg['Auth']['Username'] = usr
-    #
-    #     if pswd := getenv(f'{self.env_prefix}Auth_Password'):
-    #         self.cfg['Auth']['Password'] = pswd
-    #
-    #     if uri := getenv('UKC_URI_BASE'):
-    #         self.cfg['URI']['Base'] = uri
-    #
-    #     return
 
 
 if __name__ == '__main__':

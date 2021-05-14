@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "unbound-key-control-client-api"
-version = "0.15.1"
+version = "0.16.0"
 description = "Client API for Unbound Key Control"
 authors = ["Jerod Gawne <jerodgawne@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9.0"  # Recommended 3.9.0+
 
-base-client-api = "^2.3.1"
+base-client-api = "^2.4.0"
 
 [tool.poetry.dev-dependencies]
 devtools = "^0.6.1"
